@@ -190,7 +190,119 @@ def calculate_cost(
 
     MUST call record_tool_call(...) before returning.
     """
-    raise NotImplementedError("TODO 3: implement calculate_cost")
+    catering_path = _SAMPLE_DATA / "catering.json"
+    if not catering_path.exists():
+        raise ToolError("SA_TOOL_DEPENDENCY_MISSING", "catering.json is missing")
+
+    venues_path = _SAMPLE_DATA / "venues.json"
+    if not venues_path.exists():
+        raise ToolError("SA_TOOL_DEPENDENCY_MISSING", "venues.json is missing")
+
+    try:
+        with open(catering_path) as f:
+            catering_data = json.load(f)
+    except Exception as e:
+        raise ToolError("SA_TOOL_DEPENDENCY_MISSING", f"Failed to load catering.json: {e}")
+
+    try:
+        with open(venues_path) as f:
+            venues_data = json.load(f)
+    except Exception as e:
+        raise ToolError("SA_TOOL_DEPENDENCY_MISSING", f"Failed to load venues.json: {e}")
+
+    # Find the venue
+    venue = None
+    for v in venues_data:
+        if v.get("id") == venue_id:
+            venue = v
+            break
+
+    if venue is None:
+        err = ToolError("SA_TOOL_INVALID_INPUT", f"Venue '{venue_id}' not found")
+        record_tool_call(
+            "calculate_cost",
+            {
+                "venue_id": venue_id,
+                "party_size": party_size,
+                "duration_hours": duration_hours,
+                "catering_tier": catering_tier,
+            },
+            {"error": err.message}
+        )
+        return ToolResult(
+            success=False,
+            output={"error": err.message},
+            summary=f"calculate_cost({venue_id}, party={party_size}): venue not found",
+            error=err
+        )
+
+    base_rates = catering_data.get("base_rates_gbp_per_head", {})
+    if catering_tier not in base_rates:
+        err = ToolError("SA_TOOL_INVALID_INPUT", f"Catering tier '{catering_tier}' not found")
+        record_tool_call(
+            "calculate_cost",
+            {
+                "venue_id": venue_id,
+                "party_size": party_size,
+                "duration_hours": duration_hours,
+                "catering_tier": catering_tier,
+            },
+            {"error": err.message}
+        )
+        return ToolResult(
+            success=False,
+            output={"error": err.message},
+            summary=f"calculate_cost({venue_id}, party={party_size}): catering tier not found",
+            error=err
+        )
+
+    base_per_head = base_rates[catering_tier]
+    venue_modifiers = catering_data.get("venue_modifiers", {})
+    venue_mult = venue_modifiers.get(venue_id, 1.0)
+    service_charge_percent = catering_data.get("service_charge_percent", 10)
+
+    # Compute subtotal and service charge as rounded integers
+    subtotal = base_per_head * venue_mult * party_size * max(1, duration_hours)
+    subtotal_gbp = int(round(subtotal))
+    service_gbp = int(round(subtotal * service_charge_percent / 100))
+
+    hire_fee = venue.get("hire_fee_gbp", 0)
+    min_spend = venue.get("min_spend_gbp", 0)
+    total_gbp = subtotal_gbp + service_gbp + hire_fee + min_spend
+
+    # Calculate deposit according to thresholds
+    if total_gbp < 300:
+        deposit_required_gbp = 0
+    elif total_gbp <= 1000:
+        deposit_required_gbp = int(round(total_gbp * 0.20))
+    else:
+        deposit_required_gbp = int(round(total_gbp * 0.30))
+
+    output = {
+        "venue_id": venue_id,
+        "party_size": party_size,
+        "duration_hours": duration_hours,
+        "catering_tier": catering_tier,
+        "subtotal_gbp": subtotal_gbp,
+        "service_gbp": service_gbp,
+        "total_gbp": total_gbp,
+        "deposit_required_gbp": deposit_required_gbp,
+    }
+
+    summary = f"calculate_cost({venue_id}, party={party_size}): total £{total_gbp}, deposit £{deposit_required_gbp}"
+
+    record_tool_call(
+        "calculate_cost",
+        {
+            "venue_id": venue_id,
+            "party_size": party_size,
+            "duration_hours": duration_hours,
+            "catering_tier": catering_tier,
+        },
+        output,
+    )
+
+    return ToolResult(success=True, output=output, summary=summary)
 
 
 # ---------------------------------------------------------------------------
