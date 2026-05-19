@@ -14,10 +14,14 @@ The grader checks for:
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
+from sovereign_agent.errors import ToolError
 from sovereign_agent.session.directory import Session
 from sovereign_agent.tools.registry import ToolRegistry, ToolResult, _RegisteredTool
+
+from .integrity import record_tool_call
 
 _SAMPLE_DATA = Path(__file__).parent / "sample_data"
 
@@ -43,7 +47,51 @@ def venue_search(near: str, party_size: int, budget_max_gbp: int = 1000) -> Tool
     """
     # TODO 1a: load venues.json. Raise ToolError(SA_TOOL_DEPENDENCY_MISSING)
     #          if the file is absent.
-    raise NotImplementedError("TODO 1: implement venue_search")
+    venues_path = _SAMPLE_DATA / "venues.json"
+    if not venues_path.exists():
+        raise ToolError("SA_TOOL_DEPENDENCY_MISSING", "venues.json is missing")
+
+    try:
+        with open(venues_path) as f:
+            venues = json.load(f)
+    except Exception as e:
+        raise ToolError("SA_TOOL_DEPENDENCY_MISSING", f"Failed to load venues.json: {e}")
+
+    filtered_venues = []
+    for venue in venues:
+        # Check open_now == True
+        if not venue.get("open_now", False):
+            continue
+        # Check area contains <near> (case-insensitive substring match)
+        area = venue.get("area", "")
+        if near.lower() not in area.lower():
+            continue
+        # Check seats_available_evening >= party_size
+        if venue.get("seats_available_evening", 0) < party_size:
+            continue
+        # Check hire_fee_gbp + min_spend_gbp <= budget_max_gbp
+        hire_fee = venue.get("hire_fee_gbp", 0)
+        min_spend = venue.get("min_spend_gbp", 0)
+        if hire_fee + min_spend > budget_max_gbp:
+            continue
+
+        filtered_venues.append(venue)
+
+    output = {
+        "near": near,
+        "party_size": party_size,
+        "results": filtered_venues,
+        "count": len(filtered_venues),
+    }
+    summary = f"venue_search({near}, party={party_size}): {len(filtered_venues)} result(s)"
+
+    record_tool_call(
+        "venue_search",
+        {"near": near, "party_size": party_size, "budget_max_gbp": budget_max_gbp},
+        output,
+    )
+
+    return ToolResult(success=True, output=output, summary=summary)
 
 
 # ---------------------------------------------------------------------------
