@@ -109,7 +109,51 @@ def get_weather(city: str, date: str) -> ToolResult:
 
     MUST call record_tool_call(...) before returning.
     """
-    raise NotImplementedError("TODO 2: implement get_weather")
+    weather_path = _SAMPLE_DATA / "weather.json"
+    if not weather_path.exists():
+        raise ToolError("SA_TOOL_DEPENDENCY_MISSING", "weather.json is missing")
+
+    try:
+        with open(weather_path) as f:
+            weather_data = json.load(f)
+    except Exception as e:
+        raise ToolError("SA_TOOL_DEPENDENCY_MISSING", f"Failed to load weather.json: {e}")
+
+    city_key = city.lower().strip()
+    if city_key not in weather_data or date not in weather_data[city_key]:
+        err = ToolError("SA_TOOL_INVALID_INPUT", f"Weather not found for city '{city}' on date '{date}'")
+        record_tool_call(
+            "get_weather",
+            {"city": city, "date": date},
+            {"error": err.message}
+        )
+        return ToolResult(
+            success=False,
+            output={"error": err.message},
+            summary=f"get_weather({city}, {date}): weather not found",
+            error=err
+        )
+
+    city_weather = weather_data[city_key][date]
+    output = {
+        "city": city,
+        "date": date,
+        "condition": city_weather["condition"],
+        "temperature_c": city_weather["temperature_c"],
+    }
+    for k, v in city_weather.items():
+        if k not in output:
+            output[k] = v
+
+    summary = f"get_weather({city}, {date}): {output['condition']}, {output['temperature_c']}C"
+
+    record_tool_call(
+        "get_weather",
+        {"city": city, "date": date},
+        output,
+    )
+
+    return ToolResult(success=True, output=output, summary=summary)
 
 
 # ---------------------------------------------------------------------------
