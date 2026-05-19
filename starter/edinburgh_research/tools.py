@@ -55,7 +55,7 @@ def venue_search(near: str, party_size: int, budget_max_gbp: int = 1000) -> Tool
         with open(venues_path) as f:
             venues = json.load(f)
     except Exception as e:
-        raise ToolError("SA_TOOL_DEPENDENCY_MISSING", f"Failed to load venues.json: {e}")
+        raise ToolError("SA_TOOL_DEPENDENCY_MISSING", f"Failed to load venues.json: {e}") from e
 
     filtered_venues = []
     for venue in venues:
@@ -117,7 +117,7 @@ def get_weather(city: str, date: str) -> ToolResult:
         with open(weather_path) as f:
             weather_data = json.load(f)
     except Exception as e:
-        raise ToolError("SA_TOOL_DEPENDENCY_MISSING", f"Failed to load weather.json: {e}")
+        raise ToolError("SA_TOOL_DEPENDENCY_MISSING", f"Failed to load weather.json: {e}") from e
 
     city_key = city.lower().strip()
     if city_key not in weather_data or date not in weather_data[city_key]:
@@ -202,13 +202,13 @@ def calculate_cost(
         with open(catering_path) as f:
             catering_data = json.load(f)
     except Exception as e:
-        raise ToolError("SA_TOOL_DEPENDENCY_MISSING", f"Failed to load catering.json: {e}")
+        raise ToolError("SA_TOOL_DEPENDENCY_MISSING", f"Failed to load catering.json: {e}") from e
 
     try:
         with open(venues_path) as f:
             venues_data = json.load(f)
     except Exception as e:
-        raise ToolError("SA_TOOL_DEPENDENCY_MISSING", f"Failed to load venues.json: {e}")
+        raise ToolError("SA_TOOL_DEPENDENCY_MISSING", f"Failed to load venues.json: {e}") from e
 
     # Find the venue
     venue = None
@@ -444,25 +444,25 @@ def generate_flyer(session: Session, event_details: dict) -> ToolResult:
         <dl>
             <dt>Address</dt>
             <dd data-testid="venue_address">{venue_address}</dd>
-            
+
             <dt>Date</dt>
             <dd><span data-testid="date" class="badge">{date}</span></dd>
-            
+
             <dt>Time</dt>
             <dd><span data-testid="time" class="badge">{time}</span></dd>
-            
+
             <dt>Party Size</dt>
             <dd><span data-testid="party_size">{party_size}</span> people</dd>
-            
+
             <dt>Weather</dt>
             <dd><span data-testid="condition" class="badge">{condition}</span></dd>
-            
+
             <dt>Temperature</dt>
             <dd><span data-testid="temperature_c">{temperature_c}°C</span></dd>
-            
+
             <dt>Total Cost</dt>
             <dd><span data-testid="total_gbp" class="price">£{total_gbp}</span></dd>
-            
+
             <dt>Deposit Required</dt>
             <dd><span data-testid="deposit_required_gbp" class="deposit">£{deposit_required_gbp}</span></dd>
         </dl>
@@ -478,7 +478,7 @@ def generate_flyer(session: Session, event_details: dict) -> ToolResult:
     try:
         flyer_path.write_text(html_content, encoding="utf-8")
     except Exception as e:
-        raise ToolError("SA_TOOL_EXECUTION_FAILED", f"Failed to write flyer.html: {e}")
+        raise ToolError("SA_TOOL_EXECUTION_FAILED", f"Failed to write flyer.html: {e}") from e
 
     path_str = "workspace/flyer.html"
     output = {"path": path_str, "bytes_written": len(html_content)}
