@@ -331,14 +331,20 @@ def generate_flyer(session: Session, event_details: dict) -> ToolResult:
     because it writes a file.
     """
     venue_name = event_details.get("venue_name", "N/A")
-    venue_address = event_details.get("venue_address", "N/A")
-    date = event_details.get("date", "N/A")
-    time = event_details.get("time", "N/A")
+    venue_address = event_details.get("venue_address") or event_details.get("address", "N/A")
+    date = event_details.get("date") or event_details.get("event_date", "N/A")
+    time = event_details.get("time") or event_details.get("event_time", "N/A")
     party_size = event_details.get("party_size", "N/A")
     condition = event_details.get("condition", "N/A")
+
     temperature_c = event_details.get("temperature_c", "N/A")
-    total_gbp = event_details.get("total_gbp", "N/A")
+    temp_str = f"{temperature_c}°C" if isinstance(temperature_c, (int, float)) or (isinstance(temperature_c, str) and not temperature_c.strip().endswith("C")) else str(temperature_c)
+
+    total_gbp = event_details.get("total_gbp") or event_details.get("price", "N/A")
+    total_str = f"£{total_gbp}" if isinstance(total_gbp, (int, float)) or (isinstance(total_gbp, str) and not total_gbp.strip().startswith("£")) else str(total_gbp)
+
     deposit_required_gbp = event_details.get("deposit_required_gbp", "N/A")
+    deposit_str = f"£{deposit_required_gbp}" if isinstance(deposit_required_gbp, (int, float)) or (isinstance(deposit_required_gbp, str) and not deposit_required_gbp.strip().startswith("£")) else str(deposit_required_gbp)
 
     html_content = f"""<!DOCTYPE html>
 <html lang="en">
@@ -458,13 +464,13 @@ def generate_flyer(session: Session, event_details: dict) -> ToolResult:
             <dd><span data-testid="condition" class="badge">{condition}</span></dd>
 
             <dt>Temperature</dt>
-            <dd><span data-testid="temperature_c">{temperature_c}°C</span></dd>
+            <dd><span data-testid="temperature_c">{temp_str}</span></dd>
 
             <dt>Total Cost</dt>
-            <dd><span data-testid="total_gbp" class="price">£{total_gbp}</span></dd>
+            <dd><span data-testid="total_gbp" class="price">{total_str}</span></dd>
 
             <dt>Deposit Required</dt>
-            <dd><span data-testid="deposit_required_gbp" class="deposit">£{deposit_required_gbp}</span></dd>
+            <dd><span data-testid="deposit_required_gbp" class="deposit">{deposit_str}</span></dd>
         </dl>
     </article>
 </body>
