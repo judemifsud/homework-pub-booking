@@ -330,7 +330,167 @@ def generate_flyer(session: Session, event_details: dict) -> ToolResult:
     IMPORTANT: this tool MUST be registered with parallel_safe=False
     because it writes a file.
     """
-    raise NotImplementedError("TODO 4: implement generate_flyer")
+    venue_name = event_details.get("venue_name", "N/A")
+    venue_address = event_details.get("venue_address", "N/A")
+    date = event_details.get("date", "N/A")
+    time = event_details.get("time", "N/A")
+    party_size = event_details.get("party_size", "N/A")
+    condition = event_details.get("condition", "N/A")
+    temperature_c = event_details.get("temperature_c", "N/A")
+    total_gbp = event_details.get("total_gbp", "N/A")
+    deposit_required_gbp = event_details.get("deposit_required_gbp", "N/A")
+
+    html_content = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Flyer - {venue_name}</title>
+    <style>
+        :root {{
+            --bg-color: #0b0f19;
+            --card-bg: rgba(25, 32, 56, 0.6);
+            --border-color: rgba(99, 102, 241, 0.2);
+            --primary: #6366f1;
+            --primary-glow: rgba(99, 102, 241, 0.4);
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --accent: #10b981;
+            --accent-red: #ef4444;
+        }}
+        body {{
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }}
+        article {{
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 550px;
+            width: 100%;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 50px var(--primary-glow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }}
+        article:hover {{
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 0 0 70px var(--primary-glow);
+        }}
+        h1 {{
+            font-size: 32px;
+            font-weight: 800;
+            margin: 0 0 24px 0;
+            background: linear-gradient(135deg, #ffffff 0%, #a5b4fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 16px;
+        }}
+        dl {{
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            row-gap: 20px;
+            column-gap: 16px;
+            margin: 0;
+        }}
+        dt {{
+            font-weight: 600;
+            color: var(--text-muted);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: flex;
+            align-items: center;
+        }}
+        dd {{
+            margin: 0;
+            font-size: 16px;
+            color: var(--text-main);
+            font-weight: 500;
+        }}
+        .badge {{
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            background: rgba(99, 102, 241, 0.2);
+            color: #c7d2fe;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }}
+        .price {{
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--accent);
+        }}
+        .deposit {{
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--accent-red);
+        }}
+    </style>
+</head>
+<body>
+    <article>
+        <h1 data-testid="venue_name">{venue_name}</h1>
+        <dl>
+            <dt>Address</dt>
+            <dd data-testid="venue_address">{venue_address}</dd>
+            
+            <dt>Date</dt>
+            <dd><span data-testid="date" class="badge">{date}</span></dd>
+            
+            <dt>Time</dt>
+            <dd><span data-testid="time" class="badge">{time}</span></dd>
+            
+            <dt>Party Size</dt>
+            <dd><span data-testid="party_size">{party_size}</span> people</dd>
+            
+            <dt>Weather</dt>
+            <dd><span data-testid="condition" class="badge">{condition}</span></dd>
+            
+            <dt>Temperature</dt>
+            <dd><span data-testid="temperature_c">{temperature_c}°C</span></dd>
+            
+            <dt>Total Cost</dt>
+            <dd><span data-testid="total_gbp" class="price">£{total_gbp}</span></dd>
+            
+            <dt>Deposit Required</dt>
+            <dd><span data-testid="deposit_required_gbp" class="deposit">£{deposit_required_gbp}</span></dd>
+        </dl>
+    </article>
+</body>
+</html>
+"""
+
+    workspace_dir = session.workspace_dir
+    workspace_dir.mkdir(parents=True, exist_ok=True)
+    flyer_path = workspace_dir / "flyer.html"
+
+    try:
+        flyer_path.write_text(html_content, encoding="utf-8")
+    except Exception as e:
+        raise ToolError("SA_TOOL_EXECUTION_FAILED", f"Failed to write flyer.html: {e}")
+
+    path_str = "workspace/flyer.html"
+    output = {"path": path_str, "bytes_written": len(html_content)}
+    summary = f"generate_flyer: wrote {path_str} ({len(html_content)} chars)"
+
+    record_tool_call(
+        "generate_flyer",
+        {"event_details": event_details},
+        output,
+    )
+
+    return ToolResult(success=True, output=output, summary=summary)
 
 
 # ---------------------------------------------------------------------------
