@@ -132,17 +132,15 @@ def get_weather(city: str, date: str) -> ToolResult:
 
     city_key = city.lower().strip()
     if city_key not in weather_data or date not in weather_data[city_key]:
-        err = ToolError("SA_TOOL_INVALID_INPUT", f"Weather not found for city '{city}' on date '{date}'")
-        record_tool_call(
-            "get_weather",
-            {"city": city, "date": date},
-            {"error": err.message}
+        err = ToolError(
+            "SA_TOOL_INVALID_INPUT", f"Weather not found for city '{city}' on date '{date}'"
         )
+        record_tool_call("get_weather", {"city": city, "date": date}, {"error": err.message})
         return ToolResult(
             success=False,
             output={"error": err.message},
             summary=f"get_weather({city}, {date}): weather not found",
-            error=err
+            error=err,
         )
 
     city_weather = weather_data[city_key][date]
@@ -238,13 +236,13 @@ def calculate_cost(
                 "duration_hours": duration_hours,
                 "catering_tier": catering_tier,
             },
-            {"error": err.message}
+            {"error": err.message},
         )
         return ToolResult(
             success=False,
             output={"error": err.message},
             summary=f"calculate_cost({venue_id}, party={party_size}): venue not found",
-            error=err
+            error=err,
         )
 
     base_rates = catering_data.get("base_rates_gbp_per_head", {})
@@ -258,13 +256,13 @@ def calculate_cost(
                 "duration_hours": duration_hours,
                 "catering_tier": catering_tier,
             },
-            {"error": err.message}
+            {"error": err.message},
         )
         return ToolResult(
             success=False,
             output={"error": err.message},
             summary=f"calculate_cost({venue_id}, party={party_size}): catering tier not found",
-            error=err
+            error=err,
         )
 
     base_per_head = base_rates[catering_tier]
@@ -349,13 +347,31 @@ def generate_flyer(session: Session, event_details: dict) -> ToolResult:
     condition = event_details.get("condition", "N/A")
 
     temperature_c = event_details.get("temperature_c", "N/A")
-    temp_str = f"{temperature_c}°C" if isinstance(temperature_c, (int, float)) or (isinstance(temperature_c, str) and not temperature_c.strip().endswith("C")) else str(temperature_c)
+    temp_str = (
+        f"{temperature_c}°C"
+        if isinstance(temperature_c, (int, float))
+        or (isinstance(temperature_c, str) and not temperature_c.strip().endswith("C"))
+        else str(temperature_c)
+    )
 
     total_gbp = event_details.get("total_gbp") or event_details.get("price", "N/A")
-    total_str = f"£{total_gbp}" if isinstance(total_gbp, (int, float)) or (isinstance(total_gbp, str) and not total_gbp.strip().startswith("£")) else str(total_gbp)
+    total_str = (
+        f"£{total_gbp}"
+        if isinstance(total_gbp, (int, float))
+        or (isinstance(total_gbp, str) and not total_gbp.strip().startswith("£"))
+        else str(total_gbp)
+    )
 
     deposit_required_gbp = event_details.get("deposit_required_gbp", "N/A")
-    deposit_str = f"£{deposit_required_gbp}" if isinstance(deposit_required_gbp, (int, float)) or (isinstance(deposit_required_gbp, str) and not deposit_required_gbp.strip().startswith("£")) else str(deposit_required_gbp)
+    deposit_str = (
+        f"£{deposit_required_gbp}"
+        if isinstance(deposit_required_gbp, (int, float))
+        or (
+            isinstance(deposit_required_gbp, str)
+            and not deposit_required_gbp.strip().startswith("£")
+        )
+        else str(deposit_required_gbp)
+    )
 
     html_content = f"""<!DOCTYPE html>
 <html lang="en">
