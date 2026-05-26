@@ -1,0 +1,11 @@
+[
+  {
+    "id": "sg_1",
+    "description": "find venue near haymarket for 12",
+    "success_criterion": "candidate identified",
+    "estimated_tool_calls": 2,
+    "depends_on": [],
+    "assigned_half": "loop",
+    "status": "pending"
+  }
+]

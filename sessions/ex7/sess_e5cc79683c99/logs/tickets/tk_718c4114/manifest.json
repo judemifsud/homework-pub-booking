@@ -1,0 +1,21 @@
+{
+  "ticket_id": "tk_718c4114",
+  "operation": "planner.plan",
+  "started_at": "2026-05-20T10:57:49.087136+00:00",
+  "completed_at": "2026-05-20T10:57:49.087347+00:00",
+  "duration_ms": 0,
+  "outputs": [
+    {
+      "path": "/Users/judemifsud/Library/Application Support/sovereign-agent/examples/ex7-handoff-bridge/sess_e5cc79683c99/logs/tickets/tk_718c4114/raw_output.json",
+      "sha256": "73a9a35fad895abc4c130587614a9a9ea02ba172e8df21756c8a464c90e875fe",
+      "size_bytes": 259,
+      "content_type": "application/json"
+    }
+  ],
+  "metrics": {
+    "num_subgoals": 1,
+    "llm_tokens_in": 10,
+    "llm_tokens_out": 10,
+    "llm_model": "fake"
+  }
+}

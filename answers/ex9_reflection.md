@@ -4,28 +4,26 @@
 
 ### Your answer
 
-In my Ex7 run (sessions/sess_8b16caa616bf), the planner's second
-subgoal was sg_2 "commit the booking under policy rules" with
-assigned_half: "structured". The signal that drove this was the task
-text naming a deterministic constraint — "under policy rules".
-Sovereign-agent's DefaultPlanner is prompted with the list of
-available halves and their purposes; when subgoal description
-mentions rules/policy/limits, the planner prefers structured.
+In my Ex7 run (sessions/ex7/sess_8b16caa616bf), the planner produced a
+handoff from the loop half to the structured half for confirmation under
+policy rules. The concrete evidence is the trace event in
+`logs/trace.jsonl` showing `handoff_to_structured` with reason
+"passing to structured half for confirmation under policy rules".
 
-This decision is advisory, not physical. The orchestrator respects
-it only because both halves are wired up. If only a loop half
-existed (as in research_assistant), a subgoal assigned to structured
-would go to the void. That's failure mode #4 from the course slides.
+This decision is advisory, not physical. The orchestrator respects it only
+because both halves are wired up. If only a loop half existed (as in
+research_assistant), a structured handoff would still be requested but it
+would be unfulfilled. That's failure mode #4 from the course slides.
 
-The broader lesson: the planner makes an architectural decision
-based on prose interpretation. The rules need to be explicit so that the LLM
-cannot misinterpret ie in the structured half's Python — and then language
-ambiguity no longer matters.
+The broader lesson: the planner makes an architectural decision based on
+prose interpretation. The rules need to be explicit so that the LLM cannot
+misinterpret them in the structured half's Python — and then language
+ambiguity matters less.
 
 ### Citation
 
-- sessions/ex7/sess_8b16caa616bf/logs/tickets/tk_*/raw_output.json
-- sessions/ex7/sess_8b16caa616bf/logs/trace.jsonl:23
+- sessions/ex7/sess_8b16caa616bf/logs/trace.jsonl
+- sessions/ex7/sess_8b16caa616bf/logs/tickets/tk_ff67586b/raw_output.json
 
 ---
 
@@ -33,24 +31,28 @@ ambiguity no longer matters.
 
 ### Your answer
 
-During Ex5 development my integrity check caught a subtle fabrication
-that manual review missed. In session the flyer
-claimed "Total: £560" and "Deposit: £112" — plausible numbers that
-followed the deposit formula in catering.json. I skimmed and moved on.
+In the Ex5 session `sessions/ex5/sess_c1b88436de4f`, the integrity check is
+meant to prevent the flyer from inventing numbers that don't actually come
+from the tool outputs. In this run, `logs/tool_call_log.json` shows
+`calculate_cost(haymarket_tap, party=6, duration=3, tier=bar_snacks)`
+returned `total_gbp: 556` and `deposit_required_gbp: 111`.
+The generated flyer in `workspace/flyer.html` also records `£556` total and
+`£111` deposit.
 
-verify_dataflow returned ok=False with unverified_facts=['£560','£112'].
-The trace showed calculate_cost returned total_gbp=540, deposit=0. The
-real total was £540 under the £300 deposit threshold. The LLM had
-written "£560" plausibly — close enough that a human reviewer wouldn't
-notice without cross-referencing.
+A plausible subtle failure would be if the LLM had written `Total: £560`
+and `Deposit: £112` in the flyer despite the tool log proving the true
+values were `£556` and `£111`. A human reviewer could easily miss that
+because `£560` / `£112` looks reasonable, but `verify_dataflow` would flag
+those specific facts as unverified against `_TOOL_CALL_LOG`.
 
-The check caught it because it compared against ground truth in
-_TOOL_CALL_LOG, not against "does this look reasonable." I would add in boundary tests around the limits (just over and just below) along with excessive values e.g. £9999 and confirm it's caught.
+The core point is that the check is not doing plausibility judgment; it is
+checking the exact inclusion for each value in the final flyer.
 
 ### Citation
 
-- ex5/sessions/sess_8b16caa616bf/workspace/flyer.html
-- ex5/sessions/sess_8b16caa616bf/logs/trace.jsonl
+- sessions/ex5/sess_c1b88436de4f/logs/tool_call_log.json
+- sessions/ex5/sess_c1b88436de4f/logs/trace.jsonl
+- sessions/ex5/sess_c1b88436de4f/workspace/flyer.html
 
 ---
 
@@ -58,13 +60,13 @@ _TOOL_CALL_LOG, not against "does this look reasonable." I would add in boundary
 
 ### Your answer
 
+If I were shipping this agent next week, the first production failure I would expect is a structured-half dependency failure surfaced through the ticket state machine. The bridge can generate a valid forward handoff, but if the structured half is unavailable, the session transitions back to loop with a rejection reason instead of committing the booking.
 
+This is exactly what the example logs show in `sessions/ex7/sess_e5cc79683c99/logs/trace.jsonl`: the bridge records `session.state_changed` from `structured` to `loop` with `rejection_reason: "rasa unreachable: <urlopen error [Errno 61] Connection refused>"`. That line proves the ticket/state-machine machinery is the primitive that surfaces a real production failure mode.
 
-The session directories are the key for working through production failures, tracing back logs, and understanding what went wrong. They hold information akin to git commits and allow us to trace the evolution of the session to determine when, where and how the issue manifested. The slides compare it to git commits being the
-foundation — you can rebuild merge, diff, blame from commits but
-not commits from the rest. Session directories are commits.
+The session directories are the key for working through production failures, tracing back logs, and understanding what went wrong. They hold information akin to git commits and allow us to trace the evolution of the session to determine when, where and how the issue manifested. The slides compare it to git commits being the foundation — you can rebuild merge, diff, blame from commits but not commits from the rest. Session directories are commits.
 
 ### Citation
 
-- sessions/*/ — the directory itself
-- sessions/*/logs/trace.jsonl
+- sessions/ex7/sess_e5cc79683c99/logs/trace.jsonl
+- sessions/ex7/sess_e5cc79683c99/*/ — the directory itself

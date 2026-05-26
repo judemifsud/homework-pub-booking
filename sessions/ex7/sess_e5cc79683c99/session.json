@@ -1,0 +1,31 @@
+{
+  "session_id": "sess_e5cc79683c99",
+  "version": 1,
+  "created_at": "2026-05-20T10:57:49.070356+00:00",
+  "updated_at": "2026-05-20T10:57:49.088054+00:00",
+  "scenario": "ex7-handoff-bridge",
+  "state": "executing",
+  "user_id": null,
+  "current_half": "loop",
+  "planner": {
+    "subgoals": [
+      {
+        "id": "sg_1",
+        "description": "retry with larger venue after rejection",
+        "success_criterion": "different venue with enough seats",
+        "estimated_tool_calls": 2,
+        "depends_on": [],
+        "assigned_half": "loop",
+        "status": "pending"
+      }
+    ]
+  },
+  "executor": {},
+  "structured": {},
+  "memory": {},
+  "handoff_history": [],
+  "bare_mode": false,
+  "config_overrides": {},
+  "result": null,
+  "resumed_from": null
+}
