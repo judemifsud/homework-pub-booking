@@ -6,7 +6,6 @@
 
 # ── Session artifacts ────────────────────────────────────────────────
 # Sessions contain API output and should not be committed.
-sessions/
 demo_sessions_*/
 *.session.json
 

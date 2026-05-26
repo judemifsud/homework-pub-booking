@@ -1,0 +1,11 @@
+[
+  {
+    "id": "sg_1",
+    "description": "retry with larger venue after rejection",
+    "success_criterion": "different venue with enough seats",
+    "estimated_tool_calls": 2,
+    "depends_on": [],
+    "assigned_half": "loop",
+    "status": "pending"
+  }
+]

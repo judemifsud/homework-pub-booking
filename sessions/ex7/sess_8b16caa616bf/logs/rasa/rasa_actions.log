@@ -1,0 +1,8 @@
+2026-05-26 07:34:03 INFO     rasa.tracing.backend_tracing_config  - {"filename": "/Users/judemifsud/module1-agents/homework-pub-booking/rasa_project/endpoints.yml", "event_info": "No backend tracing configuration found in endpoints.yml. Supported backend tracing types are 'jaeger' and 'otlp'. Backend tracing will not be configured.", "event": "endpoint.read.no_backend_tracing_config", "level": "info"}
+2026-05-26 07:34:04 INFO     rasa_sdk.executor  - Registered function for 'action_validate_booking'.
+2026-05-26 07:34:04 INFO     rasa_sdk.endpoint  - Starting action endpoint server...
+2026-05-26 07:34:04 INFO     rasa_sdk.endpoint  - Starting plugins...
+2026-05-26 07:34:04 INFO     rasa_sdk.endpoint  - Action endpoint is up and running on http://0.0.0.0:5055
+2026-05-26 07:34:04 INFO     rasa_sdk.tracing.config  - No endpoint for tracing type available in endpoints.yml,tracing will not be configured.
+2026-05-26 07:34:04 INFO     sanic.server  - Starting worker [28515]
+2026-05-26 07:34:09 INFO     sanic.server  - Stopping worker [28515]

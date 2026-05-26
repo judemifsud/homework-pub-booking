@@ -1,0 +1,24 @@
+2026-05-26 07:33:56 INFO     rasa.tracing.backend_tracing_config  - {"filename": "/Users/judemifsud/module1-agents/homework-pub-booking/rasa_project/endpoints.yml", "event_info": "No backend tracing configuration found in endpoints.yml. Supported backend tracing types are 'jaeger' and 'otlp'. Backend tracing will not be configured.", "event": "endpoint.read.no_backend_tracing_config", "level": "info"}
+2026-05-26 07:33:57 INFO     rasa.cli.train  - {"event_info": "Started validating domain and training data...", "event": "cli.train.run_training", "level": "info"}
+2026-05-26 07:33:57 INFO     rasa.shared.core.domain  - {"event": "domain.from_yaml.validating", "level": "info"}
+2026-05-26 07:33:57 INFO     rasa.shared.core.domain  - {"event": "domain.from_yaml.validating", "level": "info"}
+2026-05-26 07:33:57 INFO     rasa.validator  - {"event_info": "Validating intents...", "event": "validator.verify_intents_in_stories.start", "level": "info"}
+2026-05-26 07:33:57 INFO     rasa.validator  - {"event_info": "Validating uniqueness of intents and stories...", "event": "validator.verify_example_repetition_in_intents.start", "level": "info"}
+2026-05-26 07:33:57 INFO     rasa.validator  - {"event_info": "Story structure validation...", "event": "validator.verify_story_structure.start", "level": "info"}
+2026-05-26 07:33:57 INFO     rasa.core.training.story_conflict  - Considering all preceding turns for conflict analysis.
+2026-05-26 07:33:57 INFO     rasa.validator  - {"event_info": "No story structure conflicts found.", "event": "validator.verify_story_structure.no_conflicts", "level": "info"}
+2026-05-26 07:33:57 INFO     rasa.validator  - {"event": "validation.flows.started", "level": "info"}
+2026-05-26 07:33:57 INFO     rasa.validator  - {"event": "validation.flows.ended", "level": "info"}
+2026-05-26 07:33:57 INFO     rasa.cli.validation.bot_config  - {"sub_agents_path": "sub_agents", "event_info": "Default sub-agents directory does not exist, no sub-agents will be available.", "event": "cli.validate_files.sub_agents_validation", "level": "info"}
+2026-05-26 07:33:57 WARNING  rasa.validator  - {"event_info": "Default pattern flows include responses with rephrasing enabled, but the NLG endpoint is not configured in endpoints.yml. Rephrasing for default patterns will be skipped.", "event": "validator.verify_rephrase_endpoints_consistency.defaults_only_rephrase_without_nlg", "level": "warning"}
+2026-05-26 07:33:59 INFO     rasa.shared.core.domain  - {"event_info": "The entire domain content has been written to file.", "filename": "PosixPath('/var/folders/6w/m7n0n9711lq5kl2vzm8vch_w0000gn/T/tmpu2w9rnvd/domain_provider/domain.yml')", "event": "domain.persist.domain_written_to_file", "level": "info"}
+2026-05-26 07:33:59 INFO     rasa.engine.training.hooks  - Restored component 'FlowPolicy' from cache.
+2026-05-26 07:33:59 INFO     rasa.engine.training.hooks  - Restored component 'CompactLLMCommandGenerator' from cache.
+2026-05-26 07:33:59 INFO     rasa.model_training  - {"event_info": "Your Rasa model is trained and saved at 'models/20260526-073359-poky-banana.tar.gz'.", "event": "model_training.train.finished_training", "level": "info"}
+[92m
+------------------------------------------------------
+Want to help shape the future of Rasa Pro?
+Share your feedback in a short conversation with our team.
+Sign up at: https://feedback.rasa.com
+------------------------------------------------------
+[0m

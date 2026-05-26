@@ -1,0 +1,11 @@
+[
+  {
+    "id": "sg_1",
+    "description": "Research pub near Haymarket, check weather, calculate costs, generate HTML flyer, and complete task",
+    "success_criterion": "workspace/flyer.html exists and complete_task is successfully called",
+    "estimated_tool_calls": 5,
+    "depends_on": [],
+    "assigned_half": "loop",
+    "status": "pending"
+  }
+]

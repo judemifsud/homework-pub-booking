@@ -1,0 +1,11 @@
+▶ training Rasa model in /Users/judemifsud/module1-agents/homework-pub-booking/rasa_project
+  $ rasa train  (cwd=/Users/judemifsud/module1-agents/homework-pub-booking/rasa_project)
+✓ Rasa model trained
+▶ starting action server on :5055
+  $ rasa run actions -p 5055  (cwd=/Users/judemifsud/module1-agents/homework-pub-booking/rasa_project)
+▶ starting rasa server on :5005
+  $ rasa run --enable-api --cors * -p 5005  (cwd=/Users/judemifsud/module1-agents/homework-pub-booking/rasa_project)
+✓ Rasa healthy: {"version":"3.16.4","minimum_compatible_version":"3.16.0rc2"}
+▶ tearing down Rasa + action server
+  rasa exited (rc=0)
+  actions exited (rc=0)

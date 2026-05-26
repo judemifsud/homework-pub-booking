@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "from_half": "loop",
+  "to_half": "structured",
+  "written_at": "2026-05-26T06:34:08.138093+00:00",
+  "session_id": "sess_8b16caa616bf",
+  "reason": "loop-half requested confirmation",
+  "context": "executor requested handoff to structured from sg_1",
+  "data": {
+    "action": "confirm_booking",
+    "venue_id": "The Royal Oak",
+    "date": "2026-04-25",
+    "time": "19:30",
+    "party_size": "6",
+    "deposit": "\u00a30"
+  },
+  "return_instructions": "If you cannot confirm (party too large, deposit too high, etc.), respond with next_action=escalate and include a human-readable 'reason' in output so the loop half can adapt.",
+  "constraints_reminder": null
+}

@@ -1,0 +1,126 @@
+2026-05-26 07:34:03 INFO     rasa.tracing.backend_tracing_config  - {"filename": "/Users/judemifsud/module1-agents/homework-pub-booking/rasa_project/endpoints.yml", "event_info": "No backend tracing configuration found in endpoints.yml. Supported backend tracing types are 'jaeger' and 'otlp'. Backend tracing will not be configured.", "event": "endpoint.read.no_backend_tracing_config", "level": "info"}
+2026-05-26 07:34:04 INFO     root  - Starting Rasa server on http://0.0.0.0:5005
+2026-05-26 07:34:04 INFO     rasa.core.processor  - {"event_info": "Loading model.", "model_path": "models/20260526-073359-poky-banana.tar.gz", "event": "rasa.core.processor.load_model", "level": "info"}
+2026-05-26 07:34:05 INFO     rasa.shared.core.domain  - {"event": "domain.from_yaml.validating", "level": "info"}
+2026-05-26 07:34:05 WARNING  rasa.shared.utils.llm  - {"event_info": "The LLM_API_HEALTH_CHECK environment variable is set to false, which will disable LLM health check. It is recommended to set this variable to true in production environments.", "event": "llm_based_command_generator.load.perform_llm_health_check.disabled", "level": "warning"}
+2026-05-26 07:34:05 INFO     rasa.dialogue_understanding.generator.llm_based_command_generator  - {"event": "llm_based_command_generator.flow_retrieval.enabled", "level": "info"}
+2026-05-26 07:34:05 WARNING  rasa.shared.utils.llm  - {"event_info": "The LLM_API_HEALTH_CHECK environment variable is set to false, which will disable embeddings API health check. It is recommended to set this variable to true in production environments.", "event": "flow_retrieval.load.perform_embeddings_health_check.disabled", "level": "warning"}
+2026-05-26 07:34:05 INFO     faiss.loader  - Loading faiss.
+2026-05-26 07:34:05 INFO     faiss.loader  - Successfully loaded faiss.
+2026-05-26 07:34:05 INFO     rasa.shared.core.domain  - {"event": "domain.from_yaml.validating", "level": "info"}
+2026-05-26 07:34:05 WARNING  rasa.validator  - {"event_info": "Default pattern flows include responses with rephrasing enabled, but the NLG endpoint is not configured in endpoints.yml. Rephrasing for default patterns will be skipped.", "event": "validator.verify_rephrase_endpoints_consistency.defaults_only_rephrase_without_nlg", "level": "warning"}
+2026-05-26 07:34:05 INFO     root  - Rasa server is up and running.
+[2026-05-26 07:34:05 +0100] [28516] [INFO] Starting worker [28516]
+2026-05-26 07:34:05 INFO     sanic.server  - Starting worker [28516]
+[93m/Users/judemifsud/module1-agents/homework-pub-booking/.venv/lib/python3.12/site-packages/rasa/shared/utils/io.py:90: UserWarning: Failed to parse arguments in line '/confirm_booking'. Expected the intent to be one of [['back', 'nlu_fallback', 'out_of_scope', 'restart', 'session_end', 'session_start', 'silence_timeout']] but found confirm_booking.Continuing with given line as user text.
+  More info at https://rasa.com/docs/rasa-pro/nlu-based-assistants/stories
+[0m
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+[2026-05-26 07:34:08 +0100] [28516] [INFO] Stopping worker [28516]
+2026-05-26 07:34:08 INFO     sanic.server  - Stopping worker [28516]

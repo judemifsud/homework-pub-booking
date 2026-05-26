@@ -1,0 +1,50 @@
+{
+  "subgoal_id": "sg_1",
+  "success": true,
+  "final_answer": "(handoff requested)",
+  "tool_calls_made": [
+    {
+      "name": "venue_search",
+      "arguments": {
+        "near": "Old Town",
+        "party_size": 6,
+        "budget_max_gbp": 2000
+      },
+      "success": true,
+      "summary": "venue_search(Old Town, party=6): 1 result(s)",
+      "requires_human_approval": false
+    },
+    {
+      "name": "handoff_to_structured",
+      "arguments": {
+        "reason": "retry after reverse handoff \u2014 scaled down to fit policy",
+        "context": "party was originally 12; rejected; re-proposing party of 6 at royal_oak (16 seats)",
+        "data": {
+          "action": "confirm_booking",
+          "venue_id": "The Royal Oak",
+          "date": "2026-04-25",
+          "time": "19:30",
+          "party_size": "6",
+          "deposit": "\u00a30"
+        }
+      },
+      "success": true,
+      "summary": "handoff to structured half: retry after reverse handoff \u2014 scaled down to fit policy",
+      "requires_human_approval": false
+    }
+  ],
+  "turns_used": 2,
+  "handoff_requested": true,
+  "handoff_payload": {
+    "reason": "retry after reverse handoff \u2014 scaled down to fit policy",
+    "context": "party was originally 12; rejected; re-proposing party of 6 at royal_oak (16 seats)",
+    "data": {
+      "action": "confirm_booking",
+      "venue_id": "The Royal Oak",
+      "date": "2026-04-25",
+      "time": "19:30",
+      "party_size": "6",
+      "deposit": "\u00a30"
+    }
+  }
+}

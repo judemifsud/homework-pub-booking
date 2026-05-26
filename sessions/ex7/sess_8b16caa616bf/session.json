@@ -1,0 +1,53 @@
+{
+  "session_id": "sess_8b16caa616bf",
+  "version": 1,
+  "created_at": "2026-05-26T06:33:48.736823+00:00",
+  "updated_at": "2026-05-26T06:34:08.811061+00:00",
+  "scenario": "ex7-handoff-bridge",
+  "state": "completed",
+  "user_id": null,
+  "current_half": "loop",
+  "planner": {
+    "subgoals": [
+      {
+        "id": "sg_1",
+        "description": "retry with larger venue after rejection",
+        "success_criterion": "different venue with enough seats",
+        "estimated_tool_calls": 2,
+        "depends_on": [],
+        "assigned_half": "loop",
+        "status": "pending"
+      }
+    ]
+  },
+  "executor": {},
+  "structured": {},
+  "memory": {},
+  "handoff_history": [],
+  "bare_mode": false,
+  "config_overrides": {},
+  "result": {
+    "committed": true,
+    "booking": {
+      "venue_id": "the_royal_oak",
+      "date": "2026-04-25",
+      "time": "19:30",
+      "party_size": 6,
+      "deposit_gbp": 0,
+      "duration_hours": 3,
+      "catering_tier": "bar_snacks"
+    },
+    "booking_reference": "BK-B7655866",
+    "rasa_response": [
+      {
+        "recipient_id": "homework-b20e0704",
+        "text": "Booking confirmed. Reference: BK-B7655866."
+      },
+      {
+        "recipient_id": "homework-b20e0704",
+        "text": "Is there anything else I can help you with?"
+      }
+    ]
+  },
+  "resumed_from": null
+}
