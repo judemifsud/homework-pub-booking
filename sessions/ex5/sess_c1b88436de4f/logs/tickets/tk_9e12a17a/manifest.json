@@ -1,0 +1,21 @@
+{
+  "ticket_id": "tk_9e12a17a",
+  "operation": "planner.plan",
+  "started_at": "2026-05-26T09:03:28.827209+00:00",
+  "completed_at": "2026-05-26T09:03:37.062229+00:00",
+  "duration_ms": 8235,
+  "outputs": [
+    {
+      "path": "/Users/judemifsud/Library/Application Support/sovereign-agent/examples/ex5-edinburgh-research/sess_c1b88436de4f/logs/tickets/tk_9e12a17a/raw_output.json",
+      "sha256": "b19f82b14e05cba327f62c991b85281e6439452385be99a134b9554aac102e6e",
+      "size_bytes": 1230,
+      "content_type": "application/json"
+    }
+  ],
+  "metrics": {
+    "num_subgoals": 2,
+    "llm_tokens_in": 783,
+    "llm_tokens_out": 1404,
+    "llm_model": "Qwen/Qwen3-Next-80B-A3B-Thinking"
+  }
+}

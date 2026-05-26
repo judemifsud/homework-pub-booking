@@ -18,14 +18,14 @@ existed (as in research_assistant), a subgoal assigned to structured
 would go to the void. That's failure mode #4 from the course slides.
 
 The broader lesson: the planner makes an architectural decision
-based on prose interpretation. Put the rules somewhere the LLM
-cannot mis-assign — in the structured half's Python — and prose
+based on prose interpretation. The rules need to be explicit so that the LLM
+cannot misinterpret ie in the structured half's Python — and then language
 ambiguity no longer matters.
 
 ### Citation
 
-- sessions/sess_8b16caa616bf/logs/tickets/tk_*/raw_output.json
-- sessions/sess_8b16caa616bf/logs/trace.jsonl:23
+- sessions/ex7/sess_8b16caa616bf/logs/tickets/tk_*/raw_output.json
+- sessions/ex7/sess_8b16caa616bf/logs/trace.jsonl:23
 
 ---
 
@@ -49,8 +49,8 @@ _TOOL_CALL_LOG, not against "does this look reasonable." I would add in boundary
 
 ### Citation
 
-- ex5/sessions/sess_a9dac554109f/workspace/flyer.html
-- ex5/sessions/sess_a9dac554109f/logs/trace.jsonl
+- ex5/sessions/sess_8b16caa616bf/workspace/flyer.html
+- ex5/sessions/sess_8b16caa616bf/logs/trace.jsonl
 
 ---
 
@@ -58,13 +58,11 @@ _TOOL_CALL_LOG, not against "does this look reasonable." I would add in boundary
 
 ### Your answer
 
-The session directories are the key for working through production failues, tracing back logs, and understanding what went wrong. They hold information akin to git commits and allow us to trace the evolution of the session to determine when, where and how the issue manifested. The slides compare it to git commits being the
+
+
+The session directories are the key for working through production failures, tracing back logs, and understanding what went wrong. They hold information akin to git commits and allow us to trace the evolution of the session to determine when, where and how the issue manifested. The slides compare it to git commits being the
 foundation — you can rebuild merge, diff, blame from commits but
 not commits from the rest. Session directories are commits.
-
-The forward-only state machine is important but fragile without directories. Tickets
-can be rebuilt as .jsonl files inside the session.
-Atomic-rename IPC is replaceable by directory polling.
 
 ### Citation
 

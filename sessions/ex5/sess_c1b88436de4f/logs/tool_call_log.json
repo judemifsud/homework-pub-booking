@@ -1,0 +1,89 @@
+[
+  {
+    "tool_name": "venue_search",
+    "arguments": {
+      "near": "Haymarket",
+      "party_size": 6,
+      "budget_max_gbp": 800
+    },
+    "output": {
+      "near": "Haymarket",
+      "party_size": 6,
+      "results": [
+        {
+          "id": "haymarket_tap",
+          "name": "Haymarket Tap",
+          "area": "Haymarket",
+          "address": "12 Dalry Rd, Edinburgh EH11 2BG",
+          "open_now": true,
+          "seats_available_evening": 8,
+          "hire_fee_gbp": 0,
+          "min_spend_gbp": 200,
+          "manager_email": "haymarket-tap@example.invalid",
+          "licensed_hours": "11:00-00:30",
+          "accepts_card": true,
+          "outdoor_space": false
+        }
+      ],
+      "count": 1
+    },
+    "timestamp": "2026-05-26T09:03:48.565523+00:00"
+  },
+  {
+    "tool_name": "get_weather",
+    "arguments": {
+      "city": "edinburgh",
+      "date": "2026-04-25"
+    },
+    "output": {
+      "city": "edinburgh",
+      "date": "2026-04-25",
+      "condition": "cloudy",
+      "temperature_c": 12,
+      "precip_mm": 0.0,
+      "wind_kph": 15
+    },
+    "timestamp": "2026-05-26T09:03:54.879092+00:00"
+  },
+  {
+    "tool_name": "calculate_cost",
+    "arguments": {
+      "venue_id": "haymarket_tap",
+      "party_size": 6,
+      "duration_hours": 3,
+      "catering_tier": "bar_snacks"
+    },
+    "output": {
+      "venue_id": "haymarket_tap",
+      "party_size": 6,
+      "duration_hours": 3,
+      "catering_tier": "bar_snacks",
+      "subtotal_gbp": 324,
+      "service_gbp": 32,
+      "total_gbp": 556,
+      "deposit_required_gbp": 111
+    },
+    "timestamp": "2026-05-26T09:04:01.013265+00:00"
+  },
+  {
+    "tool_name": "generate_flyer",
+    "arguments": {
+      "event_details": {
+        "venue_name": "Haymarket Tap",
+        "venue_address": "12 Dalry Rd, Edinburgh EH11 2BG",
+        "date": "2026-04-25",
+        "time": "19:30",
+        "party_size": 6,
+        "condition": "cloudy",
+        "temperature_c": 12,
+        "total_gbp": 556,
+        "deposit_required_gbp": 111
+      }
+    },
+    "output": {
+      "path": "workspace/flyer.html",
+      "bytes_written": 4090
+    },
+    "timestamp": "2026-05-26T09:04:14.156632+00:00"
+  }
+]

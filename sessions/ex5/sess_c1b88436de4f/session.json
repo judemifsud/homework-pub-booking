@@ -1,0 +1,42 @@
+{
+  "session_id": "sess_c1b88436de4f",
+  "version": 1,
+  "created_at": "2026-05-26T09:03:28.542457+00:00",
+  "updated_at": "2026-05-26T09:03:37.063838+00:00",
+  "scenario": "edinburgh-research",
+  "state": "executing",
+  "user_id": null,
+  "current_half": "loop",
+  "planner": {
+    "subgoals": [
+      {
+        "id": "sg_1",
+        "description": "Call venue_search(near=\"Haymarket\", party_size=6, budget_max_gbp=800). Then call get_weather(city=\"edinburgh\", date=\"2026-04-25\"). Then call calculate_cost using the venue_id value returned by venue_search, party_size=6, duration_hours=3, catering_tier=\"bar_snacks\". All three tools MUST be called. Do not skip any.",
+        "success_criterion": "venue_search, get_weather, and calculate_cost all returned data",
+        "estimated_tool_calls": 3,
+        "depends_on": [],
+        "assigned_half": "loop",
+        "status": "pending"
+      },
+      {
+        "id": "sg_2",
+        "description": "Call generate_flyer with event_details assembled from sg_1 tool outputs only: venue_name, venue_address from venue_search; condition, temperature_c from get_weather; total_gbp, deposit_required_gbp from calculate_cost. Fixed constants: date=\"2026-04-25\", time=\"19:30\", party_size=6. Then call complete_task ONCE. complete_task is the final action \u2014 stop immediately after it returns. Do not call any further tools.",
+        "success_criterion": "flyer.html exists in workspace/",
+        "estimated_tool_calls": 2,
+        "depends_on": [
+          "sg_1"
+        ],
+        "assigned_half": "loop",
+        "status": "pending"
+      }
+    ]
+  },
+  "executor": {},
+  "structured": {},
+  "memory": {},
+  "handoff_history": [],
+  "bare_mode": false,
+  "config_overrides": {},
+  "result": null,
+  "resumed_from": null
+}
