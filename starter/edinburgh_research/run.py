@@ -195,29 +195,31 @@ async def run_scenario(real: bool) -> int:
     # populate _TOOL_CALL_LOG before the real scenario runs.
     clear_log()
 
+    detailed_task = (
+        "Research an Edinburgh pub and produce an HTML event flyer.\n\n"
+        "Context:\n"
+        "  - party size: 6\n"
+        "  - date: 2026-04-25 (a Saturday)\n"
+        "  - time: 19:30\n"
+        "  - area: near Haymarket station, Edinburgh\n\n"
+        "REQUIRED tool sequence (all four tools MUST run, in order):\n"
+        "  1. venue_search(near='Haymarket', party_size=6, budget_max_gbp=800)\n"
+        "  2. get_weather(city='edinburgh', date='2026-04-25')\n"
+        "  3. calculate_cost(venue_id=<chosen pub's id>, party_size=6,\n"
+        "                    duration_hours=3, catering_tier='bar_snacks')\n"
+        "  4. generate_flyer(event_details={...})  <-- MUST be called\n"
+        "  5. complete_task(result={'flyer': 'workspace/flyer.html', ...})\n\n"
+        "Do NOT call complete_task until you have called generate_flyer. "
+        "The scenario is graded by the existence of workspace/flyer.html, "
+        "not by your final text response. The flyer is HTML — exact tool "
+        "names and argument shapes are in each tool's docstring; call them "
+        "exactly as described."
+    )
+
     with example_sessions_dir("ex5-edinburgh-research", persist=real) as sessions_root:
         session = create_session(
             scenario="edinburgh-research",
-            task=(
-                "Research an Edinburgh pub and produce an HTML event flyer.\n\n"
-                "Context:\n"
-                "  - party size: 6\n"
-                "  - date: 2026-04-25 (a Saturday)\n"
-                "  - time: 19:30\n"
-                "  - area: near Haymarket station, Edinburgh\n\n"
-                "REQUIRED tool sequence (all four tools MUST run, in order):\n"
-                "  1. venue_search(near='Haymarket', party_size=6, budget_max_gbp=800)\n"
-                "  2. get_weather(city='edinburgh', date='2026-04-25')\n"
-                "  3. calculate_cost(venue_id=<chosen pub's id>, party_size=6,\n"
-                "                    duration_hours=3, catering_tier='bar_snacks')\n"
-                "  4. generate_flyer(event_details={...})  <-- MUST be called\n"
-                "  5. complete_task(result={'flyer': 'workspace/flyer.html', ...})\n\n"
-                "Do NOT call complete_task until you have called generate_flyer. "
-                "The scenario is graded by the existence of workspace/flyer.html, "
-                "not by your final text response. The flyer is HTML — exact tool "
-                "names and argument shapes are in each tool's docstring; call them "
-                "exactly as described."
-            ),
+            task=detailed_task,
             sessions_dir=sessions_root,
         )
         print(f"Session {session.session_id}")
@@ -242,12 +244,47 @@ async def run_scenario(real: bool) -> int:
             planner_model = executor_model = "fake"
 
         tools = build_tool_registry(session)
+        if real:
+            # Custom system prompt for the planner in real mode to produce exactly 1 subgoal.
+            # Because the executor sessions are isolated with no shared history/memory between subgoals,
+            # all intermediate steps (search, weather, cost, flyer, complete_task) MUST run in a single
+            # executor session to preserve tool call message history and dataflow.
+            real_planner_system_prompt = """\
+You are the PLANNER of an always-on agent. Your job is to take a user task
+and produce a small, ordered list of subgoals that, if executed in order,
+will complete the task.
+
+Output ONLY a JSON array (no prose, no markdown fences) with this shape:
+
+  [
+    {
+      "id": "sg_1",
+      "description": "<one sentence — what this subgoal accomplishes>",
+      "success_criterion": "<how we know this subgoal is done>",
+      "estimated_tool_calls": 5,
+      "depends_on": [],
+      "assigned_half": "loop"
+    }
+  ]
+
+Rules:
+- Produce EXACTLY ONE subgoal. Because the executor runs in separate, isolated processes with no shared memory/context between subgoals, all research, calculation, and flyer generation steps MUST run inside a single executor session to preserve the tool-call message history.
+- The single subgoal must accomplish: Researching the Edinburgh pub, checking the weather, calculating the cost, writing the HTML flyer to workspace/flyer.html, and calling complete_task.
+"""
+            planner = DefaultPlanner(
+                model=planner_model,
+                client=client,
+                system_prompt=real_planner_system_prompt,
+            )
+        else:
+            planner = DefaultPlanner(model=planner_model, client=client)
+
         half = LoopHalf(
-            planner=DefaultPlanner(model=planner_model, client=client),
+            planner=planner,
             executor=DefaultExecutor(model=executor_model, client=client, tools=tools),  # type: ignore[arg-type]
         )
 
-        result = await half.run(session, {"task": "research Edinburgh venue and write flyer"})
+        result = await half.run(session, {"task": detailed_task})
         print(f"\nLoop half outcome: {result.next_action}")
         print(f"  summary: {result.summary}")
 
